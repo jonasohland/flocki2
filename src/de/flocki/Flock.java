@@ -16,10 +16,10 @@ class Flock {
 
     FlockingProperties props = new FlockingProperties();
 
-    int graincount = 200;
+    int graincount = 700;
 
     Flock() {
-        boids = new ArrayList(); // Initialize the arraylist
+        boids = new ArrayList();
         ++ttclusters;
         clusters.put(0, new Cluster(0));
     }
@@ -38,7 +38,7 @@ class Flock {
         }
     }
 
-    void run() {
+    void run(Networking net) {
 
         OscBundle bundle = new OscBundle();
         UndirectedSparseGraph<Boid, BoidVertex> boid_graph = new UndirectedSparseGraph<>();
@@ -81,6 +81,7 @@ class Flock {
 
         cllist.sort(Comparator.comparingInt(Set::size));
 
+        ArrayList<Cluster> ready_clusters = new ArrayList<>();
 
         for(int y = cllist.size() - 1 ; y >=0; --y) {
 
@@ -95,6 +96,7 @@ class Flock {
                 cl.used = true;
                 clusters.put(cl.id, cl);
             } else {
+                cl.age++;
                 cl.used = true;
             }
 
@@ -107,19 +109,29 @@ class Flock {
                 sb.last_cluster = cl.id;
             }
 
+            ArrayList<Boid> blist = new ArrayList<>(boids);
+
+            if(cl.build(blist))
+                ready_clusters.add(cl);
         }
 
         Iterator<Map.Entry<Integer, Cluster>> cl_it = clusters.entrySet().iterator();
+
+        // int clsdied = 0;
 
         while(cl_it.hasNext()){
 
             Cluster cl = cl_it.next().getValue();
 
-            if(!cl.used)
-                clusters.remove(cl);
+            if(!cl.used) {
+                clusters.remove(cl.id);
+                // ++clsdied;
+            }
 
             cl.used = false;
         }
+
+        net.sendClusterMessage(ready_clusters);
 
         // oscP5.send(bundle, remote);
     }

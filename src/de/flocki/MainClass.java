@@ -1,7 +1,8 @@
 package de.flocki;
 
+import de.hsmainz.iiwa.AsyncService.executor.context.EventLoopContextSingleThread;
+import jogamp.nativewindow.NWJNILibLoader;
 import processing.core.*;
-import processing.opengl.*;
 
 public class MainClass extends PApplet {
 
@@ -14,6 +15,8 @@ public class MainClass extends PApplet {
     Vector3D ghetto = new Vector3D();
     Shapes shapes;
 
+    Networking net = new Networking(flock);
+
     @Override
     public void settings() {
 
@@ -21,6 +24,7 @@ public class MainClass extends PApplet {
 
         shapes = new Shapes(this);
         ghetto = new Vector3D(500,500,500);
+
 
     }
 
@@ -60,7 +64,7 @@ public class MainClass extends PApplet {
 
         matter.render(this);
 
-        flock.run();
+        flock.run(net);
 
         // super.draw();
     }

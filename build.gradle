@@ -11,6 +11,10 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
     jcenter()
+    maven {
+        url "https://gitlab.rlp.net/api/v4/projects/2644/packages/maven"
+    }
+
 }
 
 configurations {
@@ -33,6 +37,7 @@ dependencies {
     compile group: 'org.javatuples', name: 'javatuples', version:'1.2'
     compile group: 'net.sf.jung', name: 'jung-graph-impl', version: '2.1.1'
     compile group: 'net.sf.jung', name: 'jung-algorithms', version: '2.1.1'
+    compile "de.hsmainz.iiwa:AsyncService:0.1-SNAPSHOT"
 }
 
 application {
