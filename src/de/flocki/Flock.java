@@ -81,11 +81,10 @@ class Flock {
 
         cllist.sort(Comparator.comparingInt(Set::size));
 
-        Iterator<Set<Boid>> it = cllist.iterator();
 
         for(int y = cllist.size() - 1 ; y >=0; --y) {
 
-            Set<Boid> boids = it.next();
+            Set<Boid> boids = cllist.get(y);
 
             int lastcl = mostCommonCluster(boids);
 
