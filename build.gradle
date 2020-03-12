@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'flocki'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+configurations {
+    provided
+}
+
+sourceSets {
+    main {
+        compileClasspath += configurations.provided
+        runtimeClasspath += configurations.provided
+    }
+}
+
+sourceSets.main.java.srcDirs = ['src']
+
+dependencies {
+    provided group: 'org.processing', name: 'core', version: '3.3.7', classifier: 'sources'
+    provided group: 'org.processing', name: 'core', version: '3.3.7'
+    compile group: 'de.sojamo', name: 'oscp5', version: '0.9.8'
+    compile group: 'org.javatuples', name: 'javatuples', version:'1.2'
+}
+
+application {
+    mainClassName = 'de.flocki.MainClass'
+}
