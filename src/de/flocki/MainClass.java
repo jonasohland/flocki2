@@ -52,7 +52,7 @@ public class MainClass extends PApplet {
         if (pause)
             return;
 
-        background(255);
+        background(0);
 
         cam.run(this);
         rotateY(PI/2);

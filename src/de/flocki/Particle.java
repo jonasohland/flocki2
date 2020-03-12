@@ -40,9 +40,9 @@ class Particle {
 
     void render(PApplet app) {
         // noStroke();
-        app.sphereDetail(24);
+        app.sphereDetail(10);
         app.pushMatrix();
-        app.fill(r,g,b);
+        app.fill(0,0,0);
         app.translate(loc.x,loc.y,loc.z);
         app.sphere(radius);
         app.popMatrix();

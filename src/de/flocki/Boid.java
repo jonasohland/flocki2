@@ -17,7 +17,10 @@ class Boid {
     float neighbordist;
     float desiredseparation;
     float perceptionangle;
-    ArrayList neighbors;
+
+    ArrayList<Boid> neighbors;
+
+    int last_cluster = 0;
 
     FlockingProperties props;
     Flock flock;
@@ -38,7 +41,7 @@ class Boid {
         loc = l.copy();
         r = 2.0f;
         group = _grp;
-        neighbors = new ArrayList();
+        neighbors = new ArrayList<Boid>();
         neighbordist = 60f;
         perceptionangle = 2f;
         desiredseparation = 15f;
@@ -142,9 +145,6 @@ class Boid {
                         renderer.stroke(90);
                         renderer.line(loc.x,loc.y,loc.z,other.loc.x,other.loc.y,other.loc.z);
                     }
-                    renderer.fill(0, 0, 0);
-                    renderer.textSize(18);
-                    renderer.text("bla", loc.x, loc.y, loc.z);
 
                 }
         }
@@ -236,7 +236,7 @@ class Boid {
         // layer.setStamp(5,(int)(loc.x) + (int)(loc.y) * width, color(0,100,200));
 
         // Draw a triangle rotated in the direction of velocity
-        renderer.fill(255);
+        renderer.fill(construction.r, construction.g, construction.b);
         renderer.stroke(0);
 
         renderer.pushMatrix();
