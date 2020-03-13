@@ -1,7 +1,5 @@
 package de.flocki;
 
-import de.hsmainz.iiwa.AsyncService.executor.context.EventLoopContext;
-
 import de.hsmainz.iiwa.AsyncService.executor.context.EventLoopContextSingleThread;
 import de.hsmainz.iiwa.AsyncService.executor.context.ExecutorWorkGuard;
 import netP5.NetAddress;
@@ -12,26 +10,29 @@ import java.util.Comparator;
 
 public class Networking implements OscEventListener {
 
-    EventLoopContextSingleThread ctx;
+    EventLoopContextSingleThread _ctx;
     ExecutorWorkGuard guard;
     Thread th;
 
     OscP5 oscp5;
     Flock f;
 
-    Networking(Flock f) {
+    Networking() {
 
-        ctx = new EventLoopContextSingleThread();
-        guard = new ExecutorWorkGuard(ctx);
+        _ctx = new EventLoopContextSingleThread();
+        guard = new ExecutorWorkGuard(_ctx);
 
         th = new Thread(() -> {
             System.out.println("Network thread running");
-            ctx.run();
+            _ctx.run();
         });
 
         th.start();
 
         oscp5 = new OscP5(this, 12000);
+    }
+
+    void setFlock(Flock f) {
         this.f = f;
     }
 
@@ -53,6 +54,18 @@ public class Networking implements OscEventListener {
             f.props.wind.setXYZ(oscMessage.get(0).floatValue(), oscMessage.get(1).floatValue(), oscMessage.get(2).floatValue());
     }
 
+    public EventLoopContextSingleThread ctx() {
+        return _ctx;
+    }
+
+    public void send(OscMessage msg) {
+        oscp5.send(msg, new NetAddress("127.0.0.1", 9001));
+    }
+
+    public void send(OscBundle bundle) {
+        oscp5.send(bundle, new NetAddress("127.0.0.1", 9001));
+    }
+
     @Override
     public void oscStatus(OscStatus oscStatus) {
         System.out.println("OSC Status: " + oscStatus.id());
@@ -60,7 +73,7 @@ public class Networking implements OscEventListener {
 
     public void sendClusterMessage(ArrayList<Cluster> clusters) {
 
-        ctx.post(() -> {
+        _ctx.post(() -> {
 
             clusters.sort(Comparator.comparingInt(Cluster::getID));
 

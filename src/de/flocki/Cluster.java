@@ -21,6 +21,8 @@ public class Cluster {
 
         direction.div(boids.size());
 
+        boidcount = boids.size();
+
         // System.out.println("ID: " + id + " x: " + direction.x + " y: "+ direction.y + " z: " + direction.z);
 
         return true;

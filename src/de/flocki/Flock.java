@@ -16,12 +16,17 @@ class Flock {
 
     FlockingProperties props = new FlockingProperties();
 
+    OutputSlotLock lock = new OutputSlotLock();
+    OutputFilter flt;
+
     int graincount = 700;
 
-    Flock() {
+    Flock(OutputFilter flt, Networking net) {
         boids = new ArrayList();
         ++ttclusters;
         clusters.put(0, new Cluster(0));
+        this.flt = flt;
+        net.setFlock(this);
     }
 
     void toggleNbhdRep() {
@@ -131,8 +136,15 @@ class Flock {
             cl.used = false;
         }
 
-        net.sendClusterMessage(ready_clusters);
+        flt._net.ctx().post(() -> {
 
+            ready_clusters.forEach(cl -> {
+                flt.dispatch(new ClusterDataMessage(cl), lock);
+            });
+
+            flt.reset(lock);
+
+        });
         // oscP5.send(bundle, remote);
     }
 

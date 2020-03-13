@@ -9,13 +9,15 @@ public class MainClass extends PApplet {
     boolean pause = false;
     boolean record = false;
 
-    Flock flock = new Flock();
+
     Matter matter = new Matter();
     Camera cam = new Camera();
     Vector3D ghetto = new Vector3D();
     Shapes shapes;
 
-    Networking net = new Networking(flock);
+    Networking net = new Networking();
+    OutputFilter filter = new OutputFilter(net);
+    Flock flock = new Flock(filter, net);
 
     @Override
     public void settings() {
