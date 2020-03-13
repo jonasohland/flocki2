@@ -24,6 +24,8 @@ public class ClusterDataMessage extends ClusterMessage {
         _msg.add((_cl.direction.y - 250) / 500);
         _msg.add((_cl.direction.z - 250) / 500);
         _msg.add(_cl.boidcount);
+        _msg.add(_cl.clustersize);
+        _msg.add(_cl.velocity);
     }
 
     @Override
